@@ -1,10 +1,14 @@
 from gui.diary import *
 from db_driver import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QListView, QMessageBox, QShortcut
+from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QListView, QMessageBox, QShortcut, QDialogButtonBox, QVBoxLayout, QLabel
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import pyqtSlot
 from re import match
+
+def do_nothing():
+    pass
+
 
 def show_message(root, title, text, message_type):
     message = QMessageBox(root)
@@ -14,6 +18,29 @@ def show_message(root, title, text, message_type):
     if message_type == "Okay":
         message.setStandardButtons(QMessageBox.Ok)
         message.show()
+
+class ConrifmDialog(QDialog):
+    def __init__(self, text, title='Confirmation'):
+
+        super().__init__()
+
+        self.title = title
+        self.text = text
+
+        self.setWindowTitle(self.title)
+
+        QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+
+        self.buttonBox = QDialogButtonBox(QBtn)
+        self.buttonBox.accepted.connect(self.accept)
+        self.buttonBox.rejected.connect(self.reject)
+
+        self.layout = QVBoxLayout()
+        message = QLabel(self.text)
+        self.layout.addWidget(message)
+        self.layout.addWidget(self.buttonBox)
+        self.setLayout(self.layout)
+
 
 
 
@@ -38,13 +65,26 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         self.actionDelete.triggered.connect(lambda: self.delete_action())
 
         self.actionClose.triggered.connect(lambda: self.close_action())
+        self.actionClose.setShortcut(QKeySequence("Ctrl+Q"))
 
 
         self.save_button.clicked.connect(lambda: self.save_button_event())
         self.save_button.setEnabled(False)
 
-
         self.lock()
+
+        # comfort
+        self.setLucidSC = QShortcut(QKeySequence('Ctrl+L'), self)
+        self.setLucidSC.activated.connect(
+            lambda: \
+            (
+                self.lucid_checkbox.setChecked(True) \
+                if not self.lucid_checkbox.isChecked() \
+                else self.lucid_checkbox.setChecked(False)) \
+            if self.lucid_checkbox.isEnabled() else do_nothing() 
+            ) # is this absolute shit code? 
+
+    
 
     def lock(self):
         self.title_edit.setText("")
@@ -61,6 +101,14 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         self.main_edit.setEnabled(True)
         self.lucid_checkbox.setEnabled(True)
         self.save_button.setEnabled(True)
+
+    def is_locked(self):
+        return not all([
+                self.main_edit.isEnabled(),
+                self.title_edit.isEnabled(),
+                self.lucid_checkbox.isEnabled(),
+                self.save_button.isEnabled()
+            ])
 
 
     def save_button_event(self):
@@ -132,11 +180,18 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         select_dlg.show()
 
     def delete_action(self):
-        delete_by_id_note(self.note.id)
-        self.lock()
+        if not self.is_locked():
+            if ConrifmDialog('Are you sure you want to delete this note?').exec():
+                delete_by_id_note(self.note.id)
+                self.lock()
+            return
+        show_message(self, 'Warning', 'First select note', 'Okay')
 
     def close_action(self):
-        self.lock()
+        if not self.is_locked():
+            if ConrifmDialog('Are you sure you want to close?\nAll changes will be discarded').exec():
+                self.lock()    
+        
 
 
 if __name__ == "__main__":
