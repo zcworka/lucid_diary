@@ -58,7 +58,13 @@ class Ui_MainWindow(object):
         self.actionSelect.setObjectName("actionSelect")
         self.actionCreate = QtWidgets.QAction(MainWindow)
         self.actionCreate.setObjectName("actionCreate")
+        self.actionNew = QtWidgets.QAction(MainWindow)
+        self.actionNew.setObjectName("actionNew")
+        self.actionDelete = QtWidgets.QAction(MainWindow)
+        self.actionDelete.setObjectName("actionDelete")
+        self.menuNote.addAction(self.actionNew)
         self.menuNote.addAction(self.actionSelect)
+        self.menuNote.addAction(self.actionDelete)
         self.menubar.addAction(self.menuNote.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -73,6 +79,8 @@ class Ui_MainWindow(object):
         self.menuNote.setTitle(_translate("MainWindow", "Note"))
         self.actionSelect.setText(_translate("MainWindow", "Select"))
         self.actionCreate.setText(_translate("MainWindow", "Create"))
+        self.actionNew.setText(_translate("MainWindow", "New"))
+        self.actionDelete.setText(_translate("MainWindow", "Delete"))
 
 
 if __name__ == "__main__":

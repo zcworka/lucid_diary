@@ -4,6 +4,7 @@ from peewee import *
 
 database = SqliteDatabase('db/notes.db')
 
+
 class Note(Model):
 	id = IntegerField(primary_key=True)
 	title = TextField()
@@ -29,6 +30,7 @@ def get_all_note():
 
 def new_note(title, main_text, lucid):
 	result = Note.insert(title=title, main_text=main_text, lucid=lucid).execute()
+	return result
 
 def delete_by_id_note(note_id):
 	result = Note.delete().where(Note.id == note_id).execute()

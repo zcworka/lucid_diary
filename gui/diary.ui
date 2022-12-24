@@ -105,7 +105,9 @@ QMessageBox QLabel {
     <property name="title">
      <string>Note</string>
     </property>
+    <addaction name="actionNew"/>
     <addaction name="actionSelect"/>
+    <addaction name="actionDelete"/>
    </widget>
    <addaction name="menuNote"/>
   </widget>
@@ -117,6 +119,16 @@ QMessageBox QLabel {
   <action name="actionCreate">
    <property name="text">
     <string>Create</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="text">
+    <string>Delete</string>
    </property>
   </action>
  </widget>

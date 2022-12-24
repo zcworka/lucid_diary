@@ -1,7 +1,9 @@
 from gui.diary import *
 from db_driver import *
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QListView, QMessageBox
+from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QListView, QMessageBox, QShortcut
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import pyqtSlot
 from re import match
 
 def show_message(root, title, text, message_type):
@@ -15,7 +17,6 @@ def show_message(root, title, text, message_type):
 
 
 
-
 class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
     def __init__(self) -> None:
@@ -25,20 +26,60 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         self.screen_size = QApplication.primaryScreen().size()
 
         self.actionSelect.triggered.connect(lambda: self.select_action())
+        self.actionSelect.setShortcut(QKeySequence("Ctrl+O"))
+
+        self.actionNew.triggered.connect(lambda: self.new_action())
+        self.actionNew.setShortcut(QKeySequence("Ctrl+N"))
+
+        self.actionDelete.triggered.connect(lambda: self.delete_action())
+
 
         self.save_button.clicked.connect(lambda: self.save_button_event())
         self.save_button.setEnabled(False)
 
+        self.lock()
+
+    def lock(self):
+        self.title_edit.setText("")
+        self.main_edit.setText("")
+        self.lucid_checkbox.setChecked(False)
+
+        self.title_edit.setEnabled(False)
+        self.main_edit.setEnabled(False)
+        self.lucid_checkbox.setEnabled(False)
+        self.save_button.setEnabled(False)
+
+    def unlock(self):
+        self.title_edit.setEnabled(True)
+        self.main_edit.setEnabled(True)
+        self.lucid_checkbox.setEnabled(True)
+        self.save_button.setEnabled(True)
+
 
     def save_button_event(self):
-        islucid = self.lucid_checkbox.isChecked()
         title = self.title_edit.text()
         text = self.main_edit.toPlainText()
+        islucid = self.lucid_checkbox.isChecked()
 
-        update_note(self.note.id, title, text, islucid)
+        if self.note == "New":
+            current_note_id = new_note(title, text, islucid)
+            self.note = get_by_id_note(current_note_id)
+            show_message(self, "Successfull", "Note is saved!", "Okay")
+            return
+        else:
+            update_note(self.note.id, title, text, islucid)
+            show_message(self, "Successfull", "Note is saved!", "Okay")  
+            return
 
-        show_message(self, "Successfull", "Note is saved!", "Okay")  
+    def new_action(self):
+        self.note = "New"
 
+        self.title_edit.setText("")
+        self.main_edit.setText("")
+        self.lucid_checkbox.setChecked(False)
+
+        self.save_button.setEnabled(True)
+        self.unlock()
 
     def select_action(self):
 
@@ -54,13 +95,17 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
             self.title_edit.setText(self.note.title)
             self.main_edit.setText(self.note.main_text)
-            
+
+            if self.note.lucid == True:
+                self.lucid_checkbox.setChecked(True)
+            else:
+                self.lucid_checkbox.setChecked(False)
+
+            self.unlock()
 
 
         select_dlg = QDialog(self)
         select_dlg.setWindowTitle('Select dream title')
-
-        
 
         notes_listview = QListView(select_dlg)
         notes_model = QtGui.QStandardItemModel()
@@ -78,10 +123,9 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
         select_dlg.show()
 
-
-
-
-
+    def delete_action(self):
+        delete_by_id_note(self.note.id)
+        self.lock()
 
 
 if __name__ == "__main__":
