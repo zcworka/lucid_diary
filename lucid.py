@@ -23,6 +23,10 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         Root.show(self)
+
+        self.current_note_index = None
+        self.notes_buffer = {}
+
         self.screen_size = QApplication.primaryScreen().size()
 
         self.actionSelect.triggered.connect(lambda: self.select_action())
@@ -33,9 +37,12 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
         self.actionDelete.triggered.connect(lambda: self.delete_action())
 
+        self.actionClose.triggered.connect(lambda: self.close_action())
+
 
         self.save_button.clicked.connect(lambda: self.save_button_event())
         self.save_button.setEnabled(False)
+
 
         self.lock()
 
@@ -86,8 +93,8 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         def select_button_click():
             item_index = notes_listview.currentIndex()
             note_item = notes_model.itemFromIndex(item_index).text()
-            note_id = match(r'\d+', note_item).group()
-            note_title = note_item.replace(f"{note_id}: ", "")
+
+            note_id = self.notes_buffer[item_index]
 
             self.note = get_by_id_note(int(note_id))
             select_dlg.close()
@@ -114,7 +121,8 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         for note in get_all_note():
             item = QtGui.QStandardItem(f"Title: {note.title}        {'Lucid' if note.lucid == True else ''}")
             notes_model.appendRow(item)
-            
+            self.notes_buffer[item.index()] = note.id
+
 
         select_button = QPushButton(select_dlg)
         select_button.setGeometry(175, 150, 80, 40)
@@ -125,6 +133,9 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
     def delete_action(self):
         delete_by_id_note(self.note.id)
+        self.lock()
+
+    def close_action(self):
         self.lock()
 
 
