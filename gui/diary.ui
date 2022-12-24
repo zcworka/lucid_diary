@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>600</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,33 +15,76 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QLabel {
-	border: 1px solid black;
+	border: 7px solid rgba(0, 0, 0, 0.02);
 	padding: 3px;
 	border-radius: 5px;
-	font-style: italic;
+	font-size: 15px;
+	text-transform: uppercase;
+	color: rgb(212, 212, 212);
+}
+
+QMessageBox {
+	background-color: rgb(97, 0, 97);
 }
 
 QMessageBox QLabel {
 	border: none;
-	font-size: 34px;
+	font-size: 28px;
 	font-style: normal;
-}</string>
+	color: white;
+}
+
+QMainWindow {
+	background-color: rgb(97, 0, 97);
+}
+
+QTextEdit, QLineEdit {
+	background-color: rgb(97, 68, 97);
+	border-radius: 10px;
+	color: white;
+}
+
+QLineEdit {
+	font-size: 18px;
+}
+
+QCheckBox {
+	color: pink;
+	font-size: 16px;
+}
+
+QDialog QListView{
+	background-color: rgb(97, 0, 97);
+	color: rgb(203, 251, 255);
+	padding-left: 7px;
+}
+
+
+
+
+
+
+
+
+
+
+</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>20</y>
+      <y>12</y>
       <width>71</width>
-      <height>31</height>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Title</string>
+     <string>Title:</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignCenter</set>
+     <set>Qt::AlignHCenter|Qt::AlignTop</set>
     </property>
    </widget>
    <widget class="QLineEdit" name="title_edit">
@@ -73,6 +116,14 @@ QMessageBox QLabel {
       <height>23</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string notr="true">text-transform: uppercase;
+font-weight: 600;
+border-radius: 10px;
+border: 0.7px solid yellow;
+color: rgb(217, 103, 255);
+</string>
+    </property>
     <property name="text">
      <string>Save</string>
     </property>
@@ -82,7 +133,7 @@ QMessageBox QLabel {
      <rect>
       <x>10</x>
       <y>460</y>
-      <width>131</width>
+      <width>181</width>
       <height>21</height>
      </rect>
     </property>

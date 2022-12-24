@@ -13,24 +13,67 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(600, 600)
+        MainWindow.resize(600, 533)
         MainWindow.setStyleSheet("QLabel {\n"
-"    border: 1px solid black;\n"
+"    border: 7px solid rgba(0, 0, 0, 0.02);\n"
 "    padding: 3px;\n"
 "    border-radius: 5px;\n"
-"    font-style: italic;\n"
+"    font-size: 15px;\n"
+"    text-transform: uppercase;\n"
+"    color: rgb(212, 212, 212);\n"
+"}\n"
+"\n"
+"QMessageBox {\n"
+"    background-color: rgb(97, 0, 97);\n"
 "}\n"
 "\n"
 "QMessageBox QLabel {\n"
 "    border: none;\n"
-"    font-size: 34px;\n"
+"    font-size: 28px;\n"
 "    font-style: normal;\n"
-"}")
+"    color: white;\n"
+"}\n"
+"\n"
+"QMainWindow {\n"
+"    background-color: rgb(97, 0, 97);\n"
+"}\n"
+"\n"
+"QTextEdit, QLineEdit {\n"
+"    background-color: rgb(97, 68, 97);\n"
+"    border-radius: 10px;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QLineEdit {\n"
+"    font-size: 18px;\n"
+"}\n"
+"\n"
+"QCheckBox {\n"
+"    color: pink;\n"
+"    font-size: 16px;\n"
+"}\n"
+"\n"
+"QDialog QListView{\n"
+"    background-color: rgb(97, 0, 97);\n"
+"    color: rgb(203, 251, 255);\n"
+"    padding-left: 7px;\n"
+"}\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(10, 20, 71, 31))
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setGeometry(QtCore.QRect(10, 12, 71, 41))
+        self.label.setAlignment(QtCore.Qt.AlignHCenter|QtCore.Qt.AlignTop)
         self.label.setObjectName("label")
         self.title_edit = QtWidgets.QLineEdit(self.centralwidget)
         self.title_edit.setGeometry(QtCore.QRect(90, 20, 481, 31))
@@ -40,9 +83,15 @@ class Ui_MainWindow(object):
         self.main_edit.setObjectName("main_edit")
         self.save_button = QtWidgets.QPushButton(self.centralwidget)
         self.save_button.setGeometry(QtCore.QRect(490, 460, 80, 23))
+        self.save_button.setStyleSheet("text-transform: uppercase;\n"
+"font-weight: 600;\n"
+"border-radius: 10px;\n"
+"border: 0.7px solid yellow;\n"
+"color: rgb(217, 103, 255);\n"
+"")
         self.save_button.setObjectName("save_button")
         self.lucid_checkbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.lucid_checkbox.setGeometry(QtCore.QRect(10, 460, 131, 21))
+        self.lucid_checkbox.setGeometry(QtCore.QRect(10, 460, 181, 21))
         self.lucid_checkbox.setObjectName("lucid_checkbox")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
@@ -73,7 +122,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "Title"))
+        self.label.setText(_translate("MainWindow", "Title:"))
         self.save_button.setText(_translate("MainWindow", "Save"))
         self.lucid_checkbox.setText(_translate("MainWindow", "Is dream lucid?"))
         self.menuNote.setTitle(_translate("MainWindow", "Note"))

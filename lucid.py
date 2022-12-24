@@ -112,9 +112,9 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         notes_listview.setModel(notes_model)
 
         for note in get_all_note():
-            item = QtGui.QStandardItem(f"{note.id}: {note.title}")
+            item = QtGui.QStandardItem(f"Title: {note.title}        {'Lucid' if note.lucid == True else ''}")
             notes_model.appendRow(item)
-
+            
 
         select_button = QPushButton(select_dlg)
         select_button.setGeometry(175, 150, 80, 40)
