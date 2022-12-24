@@ -32,3 +32,6 @@ def new_note(title, main_text, lucid):
 
 def delete_by_id_note(note_id):
 	result = Note.delete().where(Note.id == note_id).execute()
+
+def update_note(note_id, title, main_text, islucid):
+	Note.update(title=title, main_text=main_text, lucid=islucid).where(Note.id == note_id).execute()
