@@ -35,7 +35,7 @@ class Ui_MainWindow(object):
 "}\n"
 "\n"
 "QMainWindow {\n"
-"    background-color: rgb(97, 0, 97);\n"
+"    background-color: rgb(37, 0, 37);\n"
 "}\n"
 "\n"
 "QTextEdit, QLineEdit {\n"
@@ -59,6 +59,10 @@ class Ui_MainWindow(object):
 "    padding-left: 7px;\n"
 "}\n"
 "\n"
+"QDateEdit {\n"
+"    color: rgb(203, 251, 255);\n"
+"    background-color: rgb(97, 68, 97);\n"
+"}\n"
 "\n"
 "\n"
 "\n"
@@ -93,6 +97,9 @@ class Ui_MainWindow(object):
         self.lucid_checkbox = QtWidgets.QCheckBox(self.centralwidget)
         self.lucid_checkbox.setGeometry(QtCore.QRect(10, 460, 181, 21))
         self.lucid_checkbox.setObjectName("lucid_checkbox")
+        self.dateEdit = QtWidgets.QDateEdit(self.centralwidget)
+        self.dateEdit.setGeometry(QtCore.QRect(370, 460, 110, 24))
+        self.dateEdit.setObjectName("dateEdit")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")

@@ -35,7 +35,7 @@ QMessageBox QLabel {
 }
 
 QMainWindow {
-	background-color: rgb(97, 0, 97);
+	background-color: rgb(37, 0, 37);
 }
 
 QTextEdit, QLineEdit {
@@ -59,6 +59,10 @@ QDialog QListView{
 	padding-left: 7px;
 }
 
+QDateEdit {
+	color: rgb(203, 251, 255);
+	background-color: rgb(97, 68, 97);
+}
 
 
 
@@ -139,6 +143,16 @@ color: rgb(217, 103, 255);
     </property>
     <property name="text">
      <string>Is dream lucid?</string>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="dateEdit">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>460</y>
+      <width>110</width>
+      <height>24</height>
+     </rect>
     </property>
    </widget>
   </widget>

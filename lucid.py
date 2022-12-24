@@ -1,9 +1,10 @@
+import datetime
 from gui.diary import *
 from db_driver import *
 from PyQt5 import QtWidgets, QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QDialog, QPushButton, QListView, QMessageBox, QShortcut, QDialogButtonBox, QVBoxLayout, QLabel
 from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtCore import pyqtSlot, QDate
 from re import match
 
 def do_nothing():
@@ -51,6 +52,8 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         self.setupUi(self)
         Root.show(self)
 
+        
+
         self.current_note_index = None
         self.notes_buffer = {}
 
@@ -58,6 +61,8 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
         self.actionSelect.triggered.connect(lambda: self.select_action())
         self.actionSelect.setShortcut(QKeySequence("Ctrl+O"))
+
+        self.dateEdit.setDate(datetime.datetime.now().date())
 
         self.actionNew.triggered.connect(lambda: self.new_action())
         self.actionNew.setShortcut(QKeySequence("Ctrl+N"))
@@ -84,23 +89,31 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
             if self.lucid_checkbox.isEnabled() else do_nothing() 
             ) # is this absolute shit code? 
 
+        self.testSC = QShortcut(QKeySequence('Ctrl+Z'), self)
+        self.testSC.activated.connect(lambda: self.testing())
+
+    def testing(self):
+        print()
     
 
     def lock(self):
         self.title_edit.setText("")
         self.main_edit.setText("")
         self.lucid_checkbox.setChecked(False)
+        self.dateEdit.setDate(datetime.datetime.strptime('01.01.2000', '%d.%m.%Y').date())
 
         self.title_edit.setEnabled(False)
         self.main_edit.setEnabled(False)
         self.lucid_checkbox.setEnabled(False)
         self.save_button.setEnabled(False)
+        self.dateEdit.setEnabled(False)
 
     def unlock(self):
         self.title_edit.setEnabled(True)
         self.main_edit.setEnabled(True)
         self.lucid_checkbox.setEnabled(True)
         self.save_button.setEnabled(True)
+        self.dateEdit.setEnabled(True)
 
     def is_locked(self):
         return not all([
@@ -108,21 +121,22 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
                 self.title_edit.isEnabled(),
                 self.lucid_checkbox.isEnabled(),
                 self.save_button.isEnabled()
-            ])
+        ])
 
 
     def save_button_event(self):
         title = self.title_edit.text()
         text = self.main_edit.toPlainText()
         islucid = self.lucid_checkbox.isChecked()
+        dream_date = datetime.datetime.strptime(self.dateEdit.text(), '%d.%m.%Y').date()
 
         if self.note == "New":
-            current_note_id = new_note(title, text, islucid)
+            current_note_id = new_note(title, text, islucid, dream_date)
             self.note = get_by_id_note(current_note_id)
             show_message(self, "Successfull", "Note is saved!", "Okay")
             return
         else:
-            update_note(self.note.id, title, text, islucid)
+            update_note(self.note.id, title, text, islucid, dream_date)
             show_message(self, "Successfull", "Note is saved!", "Okay")  
             return
 
@@ -132,6 +146,7 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         self.title_edit.setText("")
         self.main_edit.setText("")
         self.lucid_checkbox.setChecked(False)
+        self.dateEdit.setDate(datetime.datetime.now().date())
 
         self.save_button.setEnabled(True)
         self.unlock()
@@ -140,6 +155,13 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
 
         def select_button_click():
             item_index = notes_listview.currentIndex()
+
+            if not item_index.data():
+                if ConrifmDialog('Create new note?').exec():
+                    self.new_action()
+                    select_dlg.close()
+                return
+
             note_item = notes_model.itemFromIndex(item_index).text()
 
             note_id = self.notes_buffer[item_index]
@@ -155,6 +177,8 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
                 self.lucid_checkbox.setChecked(True)
             else:
                 self.lucid_checkbox.setChecked(False)
+
+            self.dateEdit.setDate(self.note.dream_date)
 
             self.unlock()
 
