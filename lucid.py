@@ -190,7 +190,7 @@ class Root(QtWidgets.QMainWindow ,Ui_MainWindow):
         notes_model = QtGui.QStandardItemModel()
         notes_listview.setModel(notes_model)
 
-        for note in get_all_note():
+        for note in get_all_note()[::-1]:
             item = QtGui.QStandardItem(f"Title: {note.title}        {'Lucid' if note.lucid == True else ''}")
             notes_model.appendRow(item)
             self.notes_buffer[item.index()] = note.id
